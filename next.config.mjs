@@ -1,7 +1,9 @@
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
-// Initialize Cloudflare bindings for local dev
-const initPromise = initOpenNextCloudflareForDev();
+// Initialize Cloudflare bindings only for local dev
+if (process.env.NODE_ENV === 'development' && !process.env.VERCEL) {
+  initOpenNextCloudflareForDev();
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
