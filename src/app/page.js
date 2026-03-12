@@ -616,47 +616,19 @@ export default function Home() {
                 the noise and ensure your content actually captures attention.
               </p>
             </div>
-            <div className="content-visual" style={{ minHeight: '360px', overflow: 'hidden' }}>
-              <svg width="320" height="320" viewBox="0 0 320 320" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                {/* Background Glow */}
-                <circle cx="160" cy="160" r="100" fill="url(#slop-glow)" opacity="0.05" />
-                <defs>
-                  <radialGradient id="slop-glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" transform="translate(160 160) rotate(90) scale(120)">
-                    <stop stopColor="var(--accent-purple)" />
-                    <stop offset="1" stopColor="transparent" />
-                  </radialGradient>
-                </defs>
-
-                {/* Robot at Zenith */}
-                <g className="robot-zenith" transform="translate(140, 30)">
-                  <circle cx="20" cy="20" r="25" stroke="var(--accent-cyan)" strokeOpacity="0.2" fill="var(--bg-secondary)" />
-                  <rect x="0" y="8" width="40" height="30" rx="4" stroke="var(--accent-cyan)" strokeWidth="1.5" fill="var(--bg-secondary)" />
-                  <path d="M10 0v8M30 0v8" stroke="var(--accent-cyan)" strokeOpacity="0.5" />
-                  <circle cx="12" cy="20" r="1.5" fill="var(--accent-cyan)" />
-                  <circle cx="28" cy="20" r="1.5" fill="var(--accent-cyan)" />
-                </g>
-
-                {/* Dense Slop Mountain */}
-                <g className="slop-mountain" transform="translate(20, 80)">
-                  {/* Scatter tiny background bubbles */}
-                  {[...Array(20)].map((_, i) => (
-                    <rect key={`bg-${i}`} x={Math.random() * 260} y={Math.random() * 180 + 50} width={Math.random() * 40 + 10} height="12" rx="3" strokeOpacity="0.05" />
-                  ))}
-                  
-                  {/* Layered Foreground Piles */}
-                  {[...Array(15)].map((_, i) => (
-                    <rect key={`fg-${i}`} x={60 + (i % 5) * 35 - i * 4} y={180 - Math.floor(i / 5) * 25} width={70 - i} height="20" rx="4" stroke={i % 3 === 0 ? "var(--accent-purple)" : "currentColor"} strokeOpacity={0.15 + (i * 0.02)} />
-                  ))}
-                  
-                  {/* Prominent High-Frequency patterns */}
-                  <g stroke="var(--accent-purple)" strokeOpacity="0.5">
-                    <rect x="100" y="100" width="80" height="22" rx="4" fill="var(--bg-secondary)" />
-                    <rect x="60" y="135" width="90" height="22" rx="4" fill="var(--bg-secondary)" />
-                    <rect x="155" y="145" width="100" height="22" rx="4" fill="var(--bg-secondary)" />
-                  </g>
-                </g>
-              </svg>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '10px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>High-Frequency Pattern Scan</div>
+            <div className="content-visual">
+              <img 
+                src="/section1.jpg" 
+                alt="Heuristic Pattern Scan" 
+                style={{ 
+                  width: '100%', 
+                  maxWidth: '420px', 
+                  height: 'auto', 
+                  borderRadius: '16px', 
+                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                  objectFit: 'cover'
+                }} 
+              />
             </div>
           </div>
         </section>
@@ -668,55 +640,19 @@ export default function Home() {
             Protect your brand's unique human voice.
           </p>
           <div className="content-grid">
-            <div className="content-visual" style={{ minHeight: '360px' }}>
-              <svg width="340" height="240" viewBox="0 0 340 240" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                {/* Browser/Window Frame */}
-                <rect x="10" y="10" width="320" height="220" rx="8" strokeOpacity="0.1" fill="var(--bg-primary)" fillOpacity="0.2" />
-                <path d="M10 40h320" strokeOpacity="0.1" />
-                <circle cx="26" cy="25" r="3" fillOpacity="0.2" fill="currentColor" />
-                <circle cx="40" cy="25" r="3" fillOpacity="0.2" fill="currentColor" />
-                
-                {/* Sidebar Split */}
-                <path d="M220 40v190" strokeOpacity="0.1" strokeDasharray="4 2" />
-                
-                {/* High Density Analysis Content */}
-                <g className="dense-analysis" transform="translate(30, 60)">
-                  {[...Array(8)].map((_, i) => (
-                    <g key={`line-${i}`} transform={`translate(0, ${i * 20})`}>
-                      <path d={`M0 0h${160 - Math.random() * 40}`} strokeOpacity="0.08" strokeWidth="1.5" />
-                      {i % 2 === 0 && (
-                        <rect x={20 + i * 5} y="-5" width={30 + i * 2} height="10" rx="2" fill={i % 4 === 0 ? "var(--accent-purple)" : "var(--accent-cyan)"} fillOpacity="0.25" stroke="none" />
-                      )}
-                      {i % 3 === 0 && (
-                        <rect x={100 - i * 3} y="-5" width="40" height="10" rx="2" fill="var(--accent-purple)" fillOpacity="0.1" stroke="none" />
-                      )}
-                    </g>
-                  ))}
-                </g>
-
-                {/* Sidebar Metrics */}
-                <g className="sidebar-metrics" transform="translate(240, 60)">
-                  {/* Gauge */}
-                  <circle cx="40" cy="30" r="32" strokeOpacity="0.05" />
-                  <path d="M40 62a32 32 0 1 1 0-64" stroke="var(--accent-purple)" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.8" />
-                  <text x="40" y="38" textAnchor="middle" fill="var(--text-primary)" fontSize="18" fontWeight="bold" stroke="none">49</text>
-                  
-                  {/* Multiple Indicators */}
-                  <g transform="translate(0, 85)">
-                    {[...Array(5)].map((_, i) => (
-                      <g key={`bar-${i}`} transform={`translate(0, ${i * 18})`}>
-                        <rect x="0" y="0" width="80" height="4" rx="2" strokeOpacity="0.05" />
-                        <rect x="0" y="0" width={20 + Math.random() * 50} height="4" rx="2" fill={i % 2 === 0 ? "var(--accent-cyan)" : "var(--accent-purple)"} fillOpacity="0.4" stroke="none" />
-                      </g>
-                    ))}
-                  </g>
-                  
-                  {/* Share/Actions Hint */}
-                  <rect x="0" y="165" width="80" height="16" rx="4" strokeOpacity="0.1" />
-                  <path d="M15 173h50" strokeOpacity="0.05" />
-                </g>
-              </svg>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Contextual Expression Depth</div>
+            <div className="content-visual">
+              <img 
+                src="/section2.jpg" 
+                alt="Detection Context Analysis UI" 
+                style={{ 
+                  width: '100%', 
+                  maxWidth: '520px', 
+                  height: 'auto', 
+                  borderRadius: '16px', 
+                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                  objectFit: 'cover'
+                }} 
+              />
             </div>
             <div className="content-text">
               <p>
