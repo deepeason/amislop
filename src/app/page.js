@@ -640,14 +640,23 @@ export default function Home() {
           </p>
           <div className="content-grid">
             <div className="content-visual">
-              <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                {/* Abstract pen stroke + flourish */}
-                <circle cx="50" cy="50" r="40" strokeOpacity="0.1" strokeDasharray="4 4" />
-                <path d="M35 65l30-30m-4 0l4-4 4 4" strokeWidth="1.5" stroke="var(--accent-purple)" strokeOpacity="0.8" />
-                <path d="M35 65c-5 5-10 2-12-1s-6-7-1-12c8-8 20-20 28-28" strokeOpacity="0.4" />
-                <path d="M60 25h15v15" strokeOpacity="0.2" />
-                {/* Human rhythm lines */}
-                <path d="M30 80h10M45 80h20M70 80h5" stroke="var(--accent-cyan)" strokeOpacity="0.4" />
+              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                {/* Decorative Background Arcs */}
+                <path d="M20 60c0-22 18-40 40-40s40 18 40 40" strokeOpacity="0.05" strokeDasharray="4 4" />
+                <path d="M30 60c0-16.5 13.5-30 30-30s30 13.5 30 30" strokeOpacity="0.08" />
+                
+                {/* Multi-layered Organic Voice Waves */}
+                <path d="M20 60c10-25 20 25 30 0s20-35 30-10 20 25 20 10" stroke="var(--accent-cyan)" strokeOpacity="0.6" strokeWidth="1.8" />
+                <path d="M25 65c8-18 15 18 25 2s15-30 25-5 15 20 15 5" stroke="var(--accent-purple)" strokeOpacity="0.3" strokeWidth="1" />
+                
+                {/* Signature/Unique Key Element */}
+                <path d="M45 85s5-2 10-10 15-25 25-35 15-5 18 0" strokeOpacity="0.8" strokeWidth="1.5" />
+                <circle cx="98" cy="40" r="3" stroke="var(--accent-purple)" strokeOpacity="0.6" strokeDasharray="1 2" />
+                
+                {/* Human Factor Particles */}
+                <circle cx="35" cy="50" r="1.5" fill="var(--accent-cyan)" fillOpacity="0.4" stroke="none" />
+                <circle cx="85" cy="70" r="1.5" fill="var(--accent-purple)" fillOpacity="0.4" stroke="none" />
+                <path d="M55 20l2 2m-2 0l-2 2" strokeOpacity="0.2" />
               </svg>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Rhythmic Fluency</div>
             </div>
