@@ -622,7 +622,6 @@ export default function Home() {
                 alt="Heuristic Pattern Scan" 
                 style={{ 
                   width: '100%', 
-                  maxWidth: '420px', 
                   height: 'auto', 
                   borderRadius: '16px', 
                   boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
@@ -646,7 +645,6 @@ export default function Home() {
                 alt="Detection Context Analysis UI" 
                 style={{ 
                   width: '100%', 
-                  maxWidth: '520px', 
                   height: 'auto', 
                   borderRadius: '16px', 
                   boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
@@ -742,7 +740,7 @@ export default function Home() {
             </div>
           </div>
           <div className="footer-bottom" style={{ marginTop: '24px', paddingTop: '24px' }}>
-            <p>&copy; {new Date().getFullYear()} AmISlop.io. Stop the <strong>ai slop</strong>.</p>
+            <p>&copy; {new Date().getFullYear()} mislop.org. Stop the <strong>ai slop</strong>.</p>
           </div>
         </div>
       </footer>

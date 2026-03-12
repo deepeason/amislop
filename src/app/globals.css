@@ -318,8 +318,27 @@ body::before {
 /* ======================== */
 .input-section {
   max-width: 720px;
-  margin: 60px auto 0;
+  margin: 60px auto 120px;
   text-align: center;
+  position: relative;
+}
+
+.input-section::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: calc(100% + 120px);
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.03), transparent);
+  background-size: 24px 24px, 100% 100%;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 70%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .hero-tag {
