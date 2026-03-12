@@ -125,6 +125,10 @@ body::before {
 }
 
 .logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-purple);
   font-size: 24px;
 }
 
@@ -239,15 +243,15 @@ body::before {
 .footer {
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-subtle);
-  padding: 64px 0 32px;
-  margin-top: 80px;
+  padding: 32px 0 16px;
+  margin-top: 40px;
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 48px;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
 }
 
 .footer-brand p {
@@ -285,7 +289,7 @@ body::before {
 
 .footer-bottom {
   border-top: 1px solid var(--border-subtle);
-  padding-top: 24px;
+  padding-top: 16px;
   text-align: center;
   color: var(--text-muted);
   font-size: 13px;
@@ -1041,4 +1045,29 @@ body::before {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--bg-elevated);
+}
+/* Refined linear graphics container */
+.content-visual {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 56px 40px;
+  text-align: center;
+  transition: var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+}
+
+.content-visual svg {
+  opacity: 0.6;
+  stroke: var(--text-secondary);
+  transition: var(--transition-normal);
+}
+
+.content-visual:hover svg {
+  opacity: 1;
+  stroke: var(--accent-purple);
 }

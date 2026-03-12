@@ -551,7 +551,7 @@ export default function Home() {
               Analyzing...
             </>
           ) : (
-            "Detect Slop 🔬"
+            "Detect Slop"
           )}
         </button>
 
@@ -577,7 +577,20 @@ export default function Home() {
                 }}
               >
                 <span className="icon">
-                  {idx < activeStep ? "✅" : step.icon}
+                  {idx < activeStep ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      {step.icon === "🔍" && <circle cx="11" cy="11" r="8"></circle>}
+                      {step.icon === "🔍" && <line x1="21" y1="21" x2="16.65" y2="16.65"></line>}
+                      {step.icon === "📊" && <line x1="18" y1="20" x2="18" y2="10"></line>}
+                      {step.icon === "📊" && <line x1="12" y1="20" x2="12" y2="4"></line>}
+                      {step.icon === "📊" && <line x1="6" y1="20" x2="6" y2="14"></line>}
+                      {step.icon === "🧠" && <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.73-2.73 2.5 2.5 0 0 1-4.75-4.21 2.5 2.5 0 0 1 0-2.01 2.5 2.5 0 0 1 4.75-4.21 2.5 2.5 0 0 1 2.73-2.73A2.5 2.5 0 0 1 9.5 2Z"></path>}
+                      {step.icon === "🧠" && <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.73-2.73 2.5 2.5 0 0 0 4.75-4.21 2.5 2.5 0 0 0 0-2.01 2.5 2.5 0 0 0-4.75-4.21 2.5 2.5 0 0 0-2.73-2.73A2.5 2.5 0 0 0 14.5 2Z"></path>}
+                      {step.icon === "⚡" && <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>}
+                    </svg>
+                  )}
                 </span>
                 <span>{step.text}</span>
               </div>
@@ -590,24 +603,31 @@ export default function Home() {
       <div className="container">
         <section className="section">
           <h2 className="section-title">The Internet is Drowning in AI Slop</h2>
-          <div className="content-grid" style={{ marginTop: '40px' }}>
+          <p className="section-subtitle">Generic metaphors and mechanical repetition.</p>
+          <div className="content-grid">
             <div className="content-text">
               <p>
-                Generic metaphors, mechanical structure, and soulless repetition—<strong>this ai slop bores me</strong>. 
-                The phrase is more than just a meme; it's a rebellion against the average. When every 
-                blog post starts with "In the rapidly evolving landscape" and ends with "In conclusion," 
-                readers disengage.
+                When every blog post starts with "In the rapidly evolving landscape" and ends 
+                with "In conclusion," readers disengage immediately. This is <strong>ai slop</strong>, 
+                and it's destroying digital trust.
               </p>
               <p>
-                This is <strong>ai slop</strong>, and it's destroying digital trust. 
-                Our <strong>ai slop website</strong> was built to provide a mirror to this trend, 
-                giving you a way to measure the "soul" of content and ensure it captures attention.
+                Our tool identifies these typical high-frequency AI patterns, helping you filter out 
+                the noise and ensure your content actually captures attention.
               </p>
             </div>
-            <div className="content-visual" style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '40px', border: '1px solid var(--border-subtle)', textAlign: 'center' }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🤖 ➡️ 🚮</div>
-              <div style={{ fontWeight: '600', color: 'var(--score-high)' }}>High Slop Detected</div>
-              <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Typical pattern found in 90% of lazy AI writing</div>
+            <div className="content-visual">
+              <svg width="120" height="80" viewBox="0 0 120 80" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                {/* Visual grid background */}
+                <path d="M10 10h100v60H10z" strokeOpacity="0.1" />
+                <path d="M10 25h100M10 40h100M10 55h100" strokeOpacity="0.05" />
+                <path d="M25 10v60M40 10v60M55 10v60M70 10v60M85 10v60M100 10v60" strokeOpacity="0.05" />
+                {/* Main Scanning Wave */}
+                <path d="M20 40h10l5-15 10 30 10-40 10 50 10-35 5 10h20" stroke="var(--accent-purple)" strokeWidth="1.5" strokeOpacity="0.8" />
+                {/* Scanning bar effect */}
+                <path d="M60 15v50" stroke="var(--accent-cyan)" strokeWidth="0.5" strokeDasharray="2 2" />
+              </svg>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Heuristic Pattern Scan</div>
             </div>
           </div>
         </section>
@@ -616,44 +636,48 @@ export default function Home() {
         <section className="section" id="creator-edge">
           <h2 className="section-title">Am I Making AI Slop?</h2>
           <p className="section-subtitle">
-            Protecting your brand credibility in the age of automation.
+            Protect your brand's unique human voice.
           </p>
-          <div className="content-grid" style={{ direction: 'rtl' }}>
-             <div className="content-text" style={{ direction: 'ltr' }}>
-              <h3>Don't Let Your AI Slop Bore Your Readers</h3>
-              <p>
-                As a creator, the last thing you want is for your audience to think <strong>your ai slop bores me website</strong>. 
-                Even with AI assistance, your unique voice should shine through. 
-              </p>
-              <p>
-                Our <strong>ai slop detector</strong> identifies the mechanical "slop patterns" that trigger 
-                reader fatigue. We help you audit your work to ensure it's worth reading, not just another 
-                piece of <strong>ai slop</strong> filler.
-              </p>
+          <div className="content-grid">
+            <div className="content-visual">
+              <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                {/* Abstract pen stroke + flourish */}
+                <circle cx="50" cy="50" r="40" strokeOpacity="0.1" strokeDasharray="4 4" />
+                <path d="M35 65l30-30m-4 0l4-4 4 4" strokeWidth="1.5" stroke="var(--accent-purple)" strokeOpacity="0.8" />
+                <path d="M35 65c-5 5-10 2-12-1s-6-7-1-12c8-8 20-20 28-28" strokeOpacity="0.4" />
+                <path d="M60 25h15v15" strokeOpacity="0.2" />
+                {/* Human rhythm lines */}
+                <path d="M30 80h10M45 80h20M70 80h5" stroke="var(--accent-cyan)" strokeOpacity="0.4" />
+              </svg>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Rhythmic Fluency</div>
             </div>
-            <div className="content-visual" style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '40px', border: '1px solid var(--border-subtle)', textAlign: 'center', direction: 'ltr' }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>✍️ ✨ 🚀</div>
-              <div style={{ fontWeight: '600', color: 'var(--score-safe)' }}>Quality Assured</div>
-              <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Human voice remains dominant and engaging</div>
+            <div className="content-text">
+              <p>
+                As a creator, the last thing you want is for your audience to think <strong>your 
+                ai slop bores me website</strong>. Even with AI assistance, your unique voice should shine through. 
+              </p>
+              <p>
+                We analyze rhythmic patterns and expression depth to ensure your work remains 
+                dominant, engaging, and worthy of your readers' time.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* Section 3: How it Works */}
         <section className="section" id="how-it-works">
-          <h2 className="section-title">How AmISlop Works</h2>
+          <h2 className="section-title">How It Works</h2>
           <div className="content-grid" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
             <div className="faq-item">
-              <span className="faq-question">L1 Statistical Filtering</span>
-              <p className="faq-answer">Analyzing word choice frequency and mathematical burstiness to catch common AI vocabulary clichés.</p>
+              <span className="faq-question">AI Buzzword Detection</span>
+              <p className="faq-answer">Identifies common AI "prompts," rigid transition phrases, and typical clichés used by LLMs.</p>
             </div>
             <div className="faq-item">
-              <span className="faq-question">L3 Semantic Recognition</span>
-              <p className="faq-answer">Using advanced models to detect repetitive logical structures and generic semantic groupings.</p>
+              <span className="faq-question">Tone & Rhythm Analysis</span>
+              <p className="faq-answer">Analyzes if the text is too mechanical and flat, capturing the lack of human-specific tonal shifts or varied rhythm.</p>
             </div>
             <div className="faq-item">
-              <span className="faq-question">Slop Coefficient</span>
-              <p className="faq-answer">A unique scoring system that measures how much your text feels like "slop" vs. intentional writing.</p>
+              <span className="faq-question">Authenticity Scoring</span>
+              <p className="faq-answer">Evaluates the "vitality" of the content, distinguishing between sincere expression and meaningless filler.</p>
             </div>
           </div>
         </section>
@@ -663,20 +687,24 @@ export default function Home() {
           <h2 className="section-title">Frequently Asked Questions</h2>
           <div className="faq-grid">
             <div className="faq-item">
-              <span className="faq-question">Is there an "ai slop bores me website" for free?</span>
-              <p className="faq-answer">Yes! AmISlop.io is the premier <strong>ai slop site</strong> that allows you to check your content for free. We believe everyone should have access to tools that improve content quality.</p>
-            </div>
-            <div className="faq-item">
-              <span className="faq-question">How can I avoid making ai slop?</span>
-              <p className="faq-answer">The best way is to use our <strong>ai slop detector</strong> to scan your drafts. Look for high "hedging" scores or repetitive sentence structures and replace them with personal anecdotes or specific data.</p>
-            </div>
-            <div className="faq-item">
               <span className="faq-question">Why does everyone say "your ai slop bores me"?</span>
               <p className="faq-answer">It's a viral reaction to the massive influx of generic, low-effort AI content on social media. People are tired of reading the same "robotic" advice and are craving authentic human connection.</p>
             </div>
             <div className="faq-item">
               <span className="faq-question">What exactly qualifies as ai slop?</span>
               <p className="faq-answer"><strong>AI slop</strong> is content generated by AI that is redundant, uninformative, or generic. It adds noise to the internet without providing true value or a unique perspective.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">How is AI slop different from regular AI content?</span>
+              <p className="faq-answer">Regular AI content can be genuinely useful—code, summaries, translations. AI slop specifically refers to content that's not only AI-generated but also adds zero value, has no personality, and was clearly made just to fill space.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">How can I avoid making ai slop?</span>
+              <p className="faq-answer">The best way is to use our <strong>ai slop detector</strong> to scan your drafts. Look for high "hedging" scores or repetitive sentence structures and replace them with personal anecdotes or specific data.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">How can I avoid watching AI slop?</span>
+              <p className="faq-answer">Curate your feed by following human creators with distinct voices. Use platform filters to block keywords like "AI-generated" and, most importantly, stop rewarding engagement-bait filler with your time and clicks.</p>
             </div>
           </div>
         </section>
@@ -687,7 +715,9 @@ export default function Home() {
           <div className="footer-grid">
             <div className="footer-brand">
               <a href="/" className="logo">
-                <span className="logo-icon">🔬</span>
+                <svg className="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 18h8" /><path d="M3 22h18" /><path d="M14 22a7 7 0 1 0 0-14h-1" /><path d="M9 14h2" /><path d="M9 12a2 2 0 1 0-4 0v6" /><path d="M12 7V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4" />
+                </svg>
                 <span className="logo-text">AmISlop</span>
               </a>
               <p>The original tool to stop the spread of boring <strong>ai slop</strong>. Built for humans who hate being bored.</p>
@@ -701,16 +731,15 @@ export default function Home() {
               </ul>
             </div>
             <div className="footer-links">
-              <h4>Community</h4>
+              <h4>Legal</h4>
               <ul>
-                <li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
-                <li><a href="#">Twitter/X</a></li>
                 <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
               </ul>
             </div>
           </div>
-          <div className="footer-bottom">
-            <p>&copy; {new Date().getFullYear()} AmISlop.io. All rights reserved. Stop the <strong>ai slop</strong>.</p>
+          <div className="footer-bottom" style={{ marginTop: '24px', paddingTop: '24px' }}>
+            <p>&copy; {new Date().getFullYear()} AmISlop.io. Stop the <strong>ai slop</strong>.</p>
           </div>
         </div>
       </footer>
