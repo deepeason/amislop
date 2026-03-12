@@ -9,6 +9,10 @@ export const metadata = {
     description: "Detect AI-generated slop instantly. Stop being tired of AI waste.",
     siteName: "AmISlop",
   },
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
