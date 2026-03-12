@@ -359,7 +359,7 @@ export default function Home() {
               <div className="details-title">Score Breakdown</div>
 
               <div className="detail-row">
-                <span className="detail-label">L1 Statistical</span>
+                <span className="detail-label">L1 Linguistic Variance</span>
                 <span
                   className="detail-value"
                   style={{ color: getScoreColor(result.l1Score) }}
@@ -372,7 +372,7 @@ export default function Home() {
               {result.l3Score != null && (
                 <>
                   <div className="detail-row" style={{ marginTop: 8 }}>
-                    <span className="detail-label">L3 Semantic AI</span>
+                    <span className="detail-label">L3 Perceptual Depth</span>
                     <span
                       className="detail-value"
                       style={{ color: getScoreColor(result.l3Score) }}
@@ -388,28 +388,28 @@ export default function Home() {
                 <>
                   <div style={{ marginTop: 16, borderTop: "1px solid var(--border-subtle)", paddingTop: 12 }}>
                     <div className="detail-row">
-                      <span className="detail-label">Vocab Density</span>
+                      <span className="detail-label">Vocab Richness</span>
                       <span className="detail-value">
                         {result.features.lexiconScore ?? "—"}
                       </span>
                     </div>
                     {result.features.patternScore != null && (
                       <div className="detail-row">
-                        <span className="detail-label">Pattern Match</span>
+                        <span className="detail-label">Stylistic Entropy</span>
                         <span className="detail-value">
                           {result.features.patternScore}
                         </span>
                       </div>
                     )}
                     <div className="detail-row">
-                      <span className="detail-label">Burstiness</span>
+                      <span className="detail-label">Structural Rhythm</span>
                       <span className="detail-value">
                         {result.features.burstinessScore ?? "—"}
                       </span>
                     </div>
                     {result.features.hedgingScore != null && (
                       <div className="detail-row">
-                        <span className="detail-label">Hedging</span>
+                        <span className="detail-label">Contextual Nuance</span>
                         <span className="detail-value">
                           {result.features.hedgingScore}/10
                         </span>
@@ -417,7 +417,7 @@ export default function Home() {
                     )}
                     {result.features.structureScore != null && (
                       <div className="detail-row">
-                        <span className="detail-label">Structure</span>
+                        <span className="detail-label">Logical Cohesion</span>
                         <span className="detail-value">
                           {result.features.structureScore}/10
                         </span>
