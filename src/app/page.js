@@ -617,15 +617,25 @@ export default function Home() {
               </p>
             </div>
             <div className="content-visual">
-              <svg width="120" height="80" viewBox="0 0 120 80" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                {/* Visual grid background */}
-                <path d="M10 10h100v60H10z" strokeOpacity="0.1" />
-                <path d="M10 25h100M10 40h100M10 55h100" strokeOpacity="0.05" />
-                <path d="M25 10v60M40 10v60M55 10v60M70 10v60M85 10v60M100 10v60" strokeOpacity="0.05" />
-                {/* Main Scanning Wave */}
-                <path d="M20 40h10l5-15 10 30 10-40 10 50 10-35 5 10h20" stroke="var(--accent-purple)" strokeWidth="1.5" strokeOpacity="0.8" />
-                {/* Scanning bar effect */}
-                <path d="M60 15v50" stroke="var(--accent-cyan)" strokeWidth="0.5" strokeDasharray="2 2" />
+              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                {/* Radar Grid */}
+                <circle cx="60" cy="60" r="50" strokeOpacity="0.05" />
+                <circle cx="60" cy="60" r="30" strokeOpacity="0.05" />
+                <path d="M60 10v100M10 60h100" strokeOpacity="0.05" />
+                <path d="M24.6 24.6l70.8 70.8M95.4 24.6L24.6 95.4" strokeOpacity="0.03" />
+                
+                {/* Scanning Wave */}
+                <path d="M30 60c5-15 10-15 15 0s10 15 15 0 10-15 15 0 10 15 15 0" stroke="var(--accent-purple)" strokeWidth="1.5" strokeOpacity="0.8" />
+                <path d="M30 65c5-10 10-10 15 0s10 10 15 0 10-10 15 0 10 10 15 0" stroke="var(--accent-cyan)" strokeWidth="1" strokeOpacity="0.3" />
+                
+                {/* Detection Nodes */}
+                <circle cx="45" cy="60" r="2" fill="var(--accent-purple)" stroke="none" fillOpacity="0.6" />
+                <circle cx="75" cy="60" r="2" fill="var(--accent-purple)" stroke="none" fillOpacity="0.6" />
+                <circle cx="60" cy="45" r="1.5" fill="var(--accent-cyan)" stroke="none" fillOpacity="0.4" />
+                
+                {/* UI Elements */}
+                <rect x="90" y="20" width="10" height="2" rx="1" fillOpacity="0.2" fill="currentColor" stroke="none" />
+                <rect x="90" y="25" width="6" height="2" rx="1" fillOpacity="0.1" fill="currentColor" stroke="none" />
               </svg>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Heuristic Pattern Scan</div>
             </div>
