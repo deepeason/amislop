@@ -226,6 +226,10 @@ body::before {
   padding: 24px;
 }
 
+#how-it-works .faq-item {
+  min-height: 180px;
+}
+
 .faq-question {
   font-weight: 600;
   color: var(--text-primary);
@@ -318,7 +322,7 @@ body::before {
 /* ======================== */
 .input-section {
   max-width: 720px;
-  margin: 60px auto 120px;
+  margin: 60px auto 80px;
   text-align: center;
   position: relative;
 }
@@ -330,7 +334,7 @@ body::before {
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
-  height: calc(100% + 120px);
+  height: calc(100% + 80px);
   background-image: 
     radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.03), transparent);
