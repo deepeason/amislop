@@ -1,66 +1,719 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useState, useRef, useCallback } from "react";
+
+// Loading step definitions
+const LOADING_STEPS = [
+  { icon: "🔍", text: "Scanning for slop vocabulary..." },
+  { icon: "📊", text: "Calculating burstiness patterns..." },
+  { icon: "🧠", text: "AI semantic analysis in progress..." },
+  { icon: "⚡", text: "Computing final slop score..." },
+];
+
+const LOADING_STEPS_SHORT = [
+  { icon: "🔍", text: "Scanning for slop vocabulary..." },
+  { icon: "📊", text: "Calculating burstiness patterns..." },
+  { icon: "⚡", text: "Computing final slop score..." },
+];
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+  const [mode, setMode] = useState("text"); // 'text' | 'url'
+  const [inputText, setInputText] = useState("");
+  const [inputUrl, setInputUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
+  const [loadingSteps, setLoadingSteps] = useState([]);
+  const [activeStep, setActiveStep] = useState(-1);
+  const [sharing, setSharing] = useState(false);
+  const [vote, setVote] = useState(null);
+
+  const textareaRef = useRef(null);
+  const resultsRef = useRef(null);
+
+  const getScoreColor = useCallback((score) => {
+    if (score >= 80) return "var(--score-critical)";
+    if (score >= 60) return "var(--score-high)";
+    if (score >= 40) return "var(--score-medium)";
+    if (score >= 20) return "var(--score-low)";
+    return "var(--score-safe)";
+  }, []);
+
+  // Simulate loading steps for visual feedback
+  const simulateLoadingSteps = useCallback((isShort) => {
+    const steps = isShort ? LOADING_STEPS_SHORT : LOADING_STEPS;
+    setLoadingSteps(steps);
+
+    steps.forEach((_, idx) => {
+      setTimeout(() => {
+        setActiveStep(idx);
+      }, idx * 800);
+    });
+  }, []);
+
+  const handleSubmit = async () => {
+    const value = mode === "text" ? inputText.trim() : inputUrl.trim();
+    if (!value) return;
+
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    setActiveStep(-1);
+
+    // Estimate if short text for loading animation
+    const isShort = mode === "text" && value.split(/\s+/).length < 50;
+    simulateLoadingSteps(isShort);
+
+    try {
+      const body =
+        mode === "text" ? { text: value } : { url: value };
+
+      const res = await fetch("/api/detect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 429) {
+          throw new Error("🚨 Rate Limit: " + (data.error || "Daily limit exceeded."));
+        }
+        throw new Error(data.error || "Detection failed");
+      }
+
+      // Small delay to let final loading animation complete
+      await new Promise((r) => setTimeout(r, 500));
+
+      setResult({
+        ...data,
+        originalText: mode === "text" ? value : (data.content || data.textPreview || ""),
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+      setActiveStep(-1);
+      setLoadingSteps([]);
+    }
+  };
+
+  const handleReset = () => {
+    setResult(null);
+    setError(null);
+    setInputText("");
+    setInputUrl("");
+    setMode("text");
+    setSharing(false);
+    setVote(null);
+  };
+
+  const handleShare = async () => {
+    if (!result?.id || sharing) return;
+    setSharing(true);
+    try {
+      const shareUrl = `${window.location.origin}/r/${result.id}`;
+      const title = `Score: ${result.slopScore}/100 - ${result.grade?.label} 🤖`;
+      const text = `AmISlop said: "${result.roastedComment}"`;
+      
+      // Try native share first
+      if (navigator.canShare && navigator.share) {
+        await navigator.share({ title, text, url: shareUrl });
+      } else {
+        // Fallback to clipboard
+        await navigator.clipboard.writeText(`${text}\n${shareUrl}`);
+        alert("Link and result copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Failed to share:", err);
+    } finally {
+      // Just temporarily keep button in generating state to let user see feedback
+      setTimeout(() => setSharing(false), 500);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      handleSubmit();
+    }
+  };
+
+  // Build highlighted text from result
+  const renderHighlightedText = () => {
+    if (!result) return null;
+
+    const text = result.originalText || result.content || result.textPreview || "";
+    const highlights = result.highlights || [];
+    const sentenceScores = result.sentenceScores || [];
+
+    if (highlights.length === 0 && sentenceScores.length === 0) {
+      return <div className="text-content">{text}</div>;
+    }
+
+    // Combine word highlights and sentence highlights
+    // We'll map characters to avoid overlap logic complexity for now
+    // But since words are inside sentences, we can render sentence spans that contain word spans.
+    // However, the easiest way to render nested spans safely is to sort all boundaries.
+    
+    // Create an array of text segments
+    const parts = [];
+    let lastEnd = 0;
+
+    for (const h of highlights) {
+      // Safety: skip if positions are invalid
+      if (h.start < lastEnd || h.start >= text.length) continue;
+
+      // Text before highlight
+      if (h.start > lastEnd) {
+        pushSegment(parts, text, lastEnd, h.start, sentenceScores);
+      }
+
+      // Highlighted segment
+      const actualEnd = Math.min(h.end, text.length);
+      const segmentText = text.substring(h.start, actualEnd);
+      
+      // wrap the highlighted word, but we also want to apply the sentence background if applicable
+      const sentence = sentenceScores.find(s => h.start >= s.start && h.start < s.end);
+      const bgClass = sentence && sentence.level !== 'low' ? `sentence-bg-${sentence.level}` : '';
+
+      parts.push(
+        <span key={`h-${h.start}`} className={bgClass}>
+          <span
+            className={`slop-highlight ${h.type === "slop_phrase" ? "phrase" : ""}`}
+          >
+            {segmentText}
+            <span className="tooltip">
+              {h.type === "slop_phrase" ? "🚨 AI Phrase" : "⚠️ Slop Word"}
+            </span>
+          </span>
+        </span>
+      );
+
+      lastEnd = actualEnd;
+    }
+
+    // Remaining text
+    if (lastEnd < text.length) {
+      pushSegment(parts, text, lastEnd, text.length, sentenceScores);
+    }
+
+    return <div className="text-content">{parts}</div>;
+  };
+
+  // Helper to push text segments and wrap them in sentence backgrounds
+  const pushSegment = (parts, text, start, end, sentenceScores) => {
+    let current = start;
+    while (current < end) {
+      // Find which sentence this chunk belongs to
+      const sentence = sentenceScores.find(s => current >= s.start && current < s.end);
+      
+      if (sentence) {
+        const chunkEnd = Math.min(end, sentence.end);
+        const bgClass = sentence.level !== 'low' ? `sentence-bg-${sentence.level}` : '';
+        const chunkText = text.substring(current, chunkEnd);
+        
+        parts.push(
+          <span key={`t-${current}`} className={bgClass} title={sentence.flags?.join(", ")}>
+            {chunkText}
+          </span>
+        );
+        current = chunkEnd;
+      } else {
+        // Find next sentence start
+        const nextSentence = sentenceScores.find(s => s.start > current);
+        const chunkEnd = nextSentence ? Math.min(end, nextSentence.start) : end;
+        parts.push(
+          <span key={`t-${current}`}>
+            {text.substring(current, chunkEnd)}
+          </span>
+        );
+        current = chunkEnd;
+      }
+    }
+  };
+
+  // Score circle (SVG gauge)
+  const renderScoreGauge = () => {
+    if (!result) return null;
+
+    const { slopScore } = result;
+    const color = getScoreColor(slopScore);
+    const circumference = 2 * Math.PI * 65; // r=65
+    const offset = circumference - (slopScore / 100) * circumference;
+
+    return (
+      <div className="score-gauge">
+        <svg className="score-circle" viewBox="0 0 140 140">
+          <circle
+            className="score-circle-bg"
+            cx="70"
+            cy="70"
+            r="65"
+          />
+          <circle
+            className="score-circle-fill"
+            cx="70"
+            cy="70"
+            r="65"
+            style={{
+              stroke: color,
+              strokeDashoffset: offset,
+              strokeDasharray: circumference,
+            }}
+          />
+        </svg>
+        <div
+          className="score-number"
+          style={{ color }}
+        >
+          {slopScore}
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </div>
+    );
+  };
+
+  const renderDetailBar = (value, color) => (
+    <div className="detail-bar">
+      <div
+        className="detail-bar-fill"
+        style={{
+          width: `${value}%`,
+          background: color || "var(--accent-purple)",
+        }}
+      />
+    </div>
+  );
+
+  // ========== RENDER ==========
+
+  // If we have results, show the results view
+  if (result) {
+    const highlightCount = result.highlights?.length || 0;
+
+    return (
+      <main className="main">
+        <div className="results-section">
+          {/* Left panel - Text with highlights */}
+          <div className="text-panel">
+            <div className="text-panel-header">
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <span className="text-panel-title">Analyzed Text</span>
+                {inputUrl && mode === 'url' && (
+                  <a href={inputUrl} target="_blank" rel="noopener noreferrer" className="source-link" title={inputUrl}>
+                    🔗 Source Link
+                  </a>
+                )}
+              </div>
+              {highlightCount > 0 && (
+                <span className="highlight-count">
+                  {highlightCount} slop marker{highlightCount > 1 ? "s" : ""} found
+                </span>
+              )}
+            </div>
+            {renderHighlightedText()}
+            <details className="disclaimer-details">
+              <summary className="disclaimer-summary">
+                <span className="summary-icon">▲</span>
+                Guidance for users and reviewers
+              </summary>
+              <div className="disclaimer-content">
+                The nature of AI content is changing constantly and our detection is not always 100% accurate. 
+                These results are for informational purposes only and should not be used as definitive proof. 
+                We recommend using human judgment for a holistic assessment.
+              </div>
+            </details>
+          </div>
+
+          {/* Right panel - Results */}
+          <div className="results-panel" ref={resultsRef}>
+            {/* Score */}
+            <div className="score-card" style={{ position: "relative" }}>
+              <button 
+                className="mini-share-btn"
+                onClick={handleShare}
+                disabled={sharing}
+                title="Share Result"
+              >
+                🔗 {sharing ? "..." : "Share"}
+              </button>
+              <div className="score-emoji">{result.grade?.emoji}</div>
+              {renderScoreGauge()}
+              <div
+                className="score-label"
+                style={{ color: getScoreColor(result.slopScore) }}
+              >
+                {result.grade?.label}
+              </div>
+            </div>
+
+            {/* Roast */}
+            {result.roastedComment && (
+              <div className="roast-card">
+                <p className="roast-quote">"{result.roastedComment}"</p>
+              </div>
+            )}
+
+            {/* Score breakdown */}
+            <div className="details-card">
+              <div className="details-title">Score Breakdown</div>
+
+              <div className="detail-row">
+                <span className="detail-label">L1 Statistical</span>
+                <span
+                  className="detail-value"
+                  style={{ color: getScoreColor(result.l1Score) }}
+                >
+                  {result.l1Score ?? "—"}
+                </span>
+              </div>
+              {result.l1Score != null && renderDetailBar(result.l1Score, getScoreColor(result.l1Score))}
+
+              {result.l3Score != null && (
+                <>
+                  <div className="detail-row" style={{ marginTop: 8 }}>
+                    <span className="detail-label">L3 Semantic AI</span>
+                    <span
+                      className="detail-value"
+                      style={{ color: getScoreColor(result.l3Score) }}
+                    >
+                      {result.l3Score}
+                    </span>
+                  </div>
+                  {renderDetailBar(result.l3Score, getScoreColor(result.l3Score))}
+                </>
+              )}
+
+              {result.features && (
+                <>
+                  <div style={{ marginTop: 16, borderTop: "1px solid var(--border-subtle)", paddingTop: 12 }}>
+                    <div className="detail-row">
+                      <span className="detail-label">Vocab Density</span>
+                      <span className="detail-value">
+                        {result.features.lexiconScore ?? "—"}
+                      </span>
+                    </div>
+                    {result.features.patternScore != null && (
+                      <div className="detail-row">
+                        <span className="detail-label">Pattern Match</span>
+                        <span className="detail-value">
+                          {result.features.patternScore}
+                        </span>
+                      </div>
+                    )}
+                    <div className="detail-row">
+                      <span className="detail-label">Burstiness</span>
+                      <span className="detail-value">
+                        {result.features.burstinessScore ?? "—"}
+                      </span>
+                    </div>
+                    {result.features.hedgingScore != null && (
+                      <div className="detail-row">
+                        <span className="detail-label">Hedging</span>
+                        <span className="detail-value">
+                          {result.features.hedgingScore}/10
+                        </span>
+                      </div>
+                    )}
+                    {result.features.structureScore != null && (
+                      <div className="detail-row">
+                        <span className="detail-label">Structure</span>
+                        <span className="detail-value">
+                          {result.features.structureScore}/10
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              <div className="detail-row" style={{ marginTop: 12 }}>
+                <span className="detail-label">Word Count</span>
+                <span className="detail-value">{result.wordCount ?? "—"}</span>
+              </div>
+
+
+
+              {result.cached && (
+                <div
+                  style={{
+                    marginTop: 8,
+                    fontSize: 12,
+                    color: "var(--text-muted)",
+                    fontStyle: "italic",
+                  }}
+                >
+                  📦 Cached result
+                </div>
+              )}
+            </div>
+
+            <div className="vote-section">
+              <span className="vote-label">Give feedback</span>
+              <div className="vote-buttons">
+                <button 
+                  className={`vote-btn upvote ${vote === 'up' ? 'active' : ''}`}
+                  onClick={() => setVote(vote === 'up' ? null : 'up')}
+                  title="Accurate"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                </button>
+                <button 
+                  className={`vote-btn downvote ${vote === 'down' ? 'active' : ''}`}
+                  onClick={() => setVote(vote === 'down' ? null : 'down')}
+                  title="Bullshit"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <div className="action-buttons no-export">
+              <button className="back-btn" onClick={handleReset} style={{ width: '100%' }}>
+                ← Analyze Another
+              </button>
+            </div>
+          </div>
         </div>
       </main>
-    </div>
+    );
+  }
+
+  // ========== INPUT VIEW ==========
+  return (
+    <main className="main">
+      <div className="input-section">
+        <div className="hero-tag">Your AI Slop Bores Me.</div>
+        <h1 className="hero-title">
+          The #1 AI Slop Detector
+        </h1>
+        <p className="hero-subtitle">
+          The original tool to detect and reduce the spread of boring <strong>ai slop</strong>. 
+          Analyze content to ensure it captures attention and doesn't bore users.
+        </p>
+
+        {/* Mode tabs */}
+        <div className="input-tabs">
+          <button
+            className={`input-tab ${mode === "text" ? "active" : ""}`}
+            onClick={() => setMode("text")}
+          >
+            📝 Paste Text
+          </button>
+          <button
+            className={`input-tab ${mode === "url" ? "active" : ""}`}
+            onClick={() => setMode("url")}
+          >
+            🔗 Enter URL
+          </button>
+        </div>
+
+        {/* Input area */}
+        {mode === "text" ? (
+          <div className="textarea-wrapper">
+            <textarea
+              ref={textareaRef}
+              className="text-input"
+              placeholder="Paste your text here... (Ctrl+Enter to submit)"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={loading}
+            />
+            <span className="char-count">
+              {inputText.length.toLocaleString()} chars
+            </span>
+          </div>
+        ) : (
+          <input
+            type="url"
+            className="url-input"
+            placeholder="https://example.com/blog-post"
+            value={inputUrl}
+            onChange={(e) => setInputUrl(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={loading}
+          />
+        )}
+
+        {/* Submit */}
+        <button
+          className="submit-btn"
+          onClick={handleSubmit}
+          disabled={
+            loading ||
+            (mode === "text" ? !inputText.trim() : !inputUrl.trim())
+          }
+        >
+          {loading ? (
+            <>
+              <span className="spinner" />
+              Analyzing...
+            </>
+          ) : (
+            "Detect Slop 🔬"
+          )}
+        </button>
+
+        {/* Error */}
+        {error && <div className="error-msg">{error}</div>}
+
+        {/* Loading progress (shown below button) */}
+        {loading && loadingSteps.length > 0 && (
+          <div className="loading-panel" style={{ marginTop: 24, textAlign: "left" }}>
+            {loadingSteps.map((step, idx) => (
+              <div
+                key={idx}
+                className={`loading-step ${
+                  idx < activeStep
+                    ? "done"
+                    : idx === activeStep
+                    ? "active"
+                    : ""
+                }`}
+                style={{
+                  animationDelay: `${idx * 0.8}s`,
+                  opacity: idx <= activeStep ? 1 : 0.3,
+                }}
+              >
+                <span className="icon">
+                  {idx < activeStep ? "✅" : step.icon}
+                </span>
+                <span>{step.text}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* SEO Content Sections */}
+      <div className="container">
+        <section className="section">
+          <h2 className="section-title">The Internet is Drowning in AI Slop</h2>
+          <div className="content-grid" style={{ marginTop: '40px' }}>
+            <div className="content-text">
+              <p>
+                Generic metaphors, mechanical structure, and soulless repetition—<strong>this ai slop bores me</strong>. 
+                The phrase is more than just a meme; it's a rebellion against the average. When every 
+                blog post starts with "In the rapidly evolving landscape" and ends with "In conclusion," 
+                readers disengage.
+              </p>
+              <p>
+                This is <strong>ai slop</strong>, and it's destroying digital trust. 
+                Our <strong>ai slop website</strong> was built to provide a mirror to this trend, 
+                giving you a way to measure the "soul" of content and ensure it captures attention.
+              </p>
+            </div>
+            <div className="content-visual" style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '40px', border: '1px solid var(--border-subtle)', textAlign: 'center' }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🤖 ➡️ 🚮</div>
+              <div style={{ fontWeight: '600', color: 'var(--score-high)' }}>High Slop Detected</div>
+              <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Typical pattern found in 90% of lazy AI writing</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 2: Am I Making AI Slop? */}
+        <section className="section" id="creator-edge">
+          <h2 className="section-title">Am I Making AI Slop?</h2>
+          <p className="section-subtitle">
+            Protecting your brand credibility in the age of automation.
+          </p>
+          <div className="content-grid" style={{ direction: 'rtl' }}>
+             <div className="content-text" style={{ direction: 'ltr' }}>
+              <h3>Don't Let Your AI Slop Bore Your Readers</h3>
+              <p>
+                As a creator, the last thing you want is for your audience to think <strong>your ai slop bores me website</strong>. 
+                Even with AI assistance, your unique voice should shine through. 
+              </p>
+              <p>
+                Our <strong>ai slop detector</strong> identifies the mechanical "slop patterns" that trigger 
+                reader fatigue. We help you audit your work to ensure it's worth reading, not just another 
+                piece of <strong>ai slop</strong> filler.
+              </p>
+            </div>
+            <div className="content-visual" style={{ background: 'var(--bg-secondary)', borderRadius: '12px', padding: '40px', border: '1px solid var(--border-subtle)', textAlign: 'center', direction: 'ltr' }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>✍️ ✨ 🚀</div>
+              <div style={{ fontWeight: '600', color: 'var(--score-safe)' }}>Quality Assured</div>
+              <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Human voice remains dominant and engaging</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: How it Works */}
+        <section className="section" id="how-it-works">
+          <h2 className="section-title">How AmISlop Works</h2>
+          <div className="content-grid" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
+            <div className="faq-item">
+              <span className="faq-question">L1 Statistical Filtering</span>
+              <p className="faq-answer">Analyzing word choice frequency and mathematical burstiness to catch common AI vocabulary clichés.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">L3 Semantic Recognition</span>
+              <p className="faq-answer">Using advanced models to detect repetitive logical structures and generic semantic groupings.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">Slop Coefficient</span>
+              <p className="faq-answer">A unique scoring system that measures how much your text feels like "slop" vs. intentional writing.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 4: FAQ */}
+        <section className="section" id="faq">
+          <h2 className="section-title">Frequently Asked Questions</h2>
+          <div className="faq-grid">
+            <div className="faq-item">
+              <span className="faq-question">Is there an "ai slop bores me website" for free?</span>
+              <p className="faq-answer">Yes! AmISlop.io is the premier <strong>ai slop site</strong> that allows you to check your content for free. We believe everyone should have access to tools that improve content quality.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">How can I avoid making ai slop?</span>
+              <p className="faq-answer">The best way is to use our <strong>ai slop detector</strong> to scan your drafts. Look for high "hedging" scores or repetitive sentence structures and replace them with personal anecdotes or specific data.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">Why does everyone say "your ai slop bores me"?</span>
+              <p className="faq-answer">It's a viral reaction to the massive influx of generic, low-effort AI content on social media. People are tired of reading the same "robotic" advice and are craving authentic human connection.</p>
+            </div>
+            <div className="faq-item">
+              <span className="faq-question">What exactly qualifies as ai slop?</span>
+              <p className="faq-answer"><strong>AI slop</strong> is content generated by AI that is redundant, uninformative, or generic. It adds noise to the internet without providing true value or a unique perspective.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <a href="/" className="logo">
+                <span className="logo-icon">🔬</span>
+                <span className="logo-text">AmISlop</span>
+              </a>
+              <p>The original tool to stop the spread of boring <strong>ai slop</strong>. Built for humans who hate being bored.</p>
+            </div>
+            <div className="footer-links">
+              <h4>Product</h4>
+              <ul>
+                <li><a href="#how-it-works">How it Works</a></li>
+                <li><a href="#creator-edge">Creator Guide</a></li>
+                <li><a href="#faq">FAQ</a></li>
+              </ul>
+            </div>
+            <div className="footer-links">
+              <h4>Community</h4>
+              <ul>
+                <li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
+                <li><a href="#">Twitter/X</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>&copy; {new Date().getFullYear()} AmISlop.io. All rights reserved. Stop the <strong>ai slop</strong>.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
   );
 }
