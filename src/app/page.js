@@ -616,23 +616,38 @@ export default function Home() {
                 the noise and ensure your content actually captures attention.
               </p>
             </div>
-            <div className="content-visual">
-              <svg width="140" height="140" viewBox="0 0 140 140" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                {/* Chatbot Frame */}
-                <rect x="40" y="20" width="60" height="45" rx="6" strokeOpacity="0.1" />
-                <path d="M60 42h20M60 35h10" strokeOpacity="0.1" />
-                <circle cx="55" cy="35" r="3" stroke="var(--accent-purple)" strokeWidth="1.5" />
-                
-                {/* User Message (Left) */}
-                <path d="M20 85h35l4 6-4-6v-12H20z" stroke="var(--accent-purple)" strokeWidth="1.2" strokeOpacity="0.8" />
-                <path d="M28 80h20M28 86h15" strokeOpacity="0.2" />
+            <div className="content-visual" style={{ minHeight: '320px' }}>
+              <svg width="240" height="240" viewBox="0 0 240 240" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                {/* Robot Head at Top */}
+                <g className="robot-head" transform="translate(100, 20)">
+                  <rect x="0" y="8" width="40" height="30" rx="6" stroke="var(--accent-cyan)" strokeWidth="1.5" />
+                  <path d="M10 0v8M30 0v8M15 4h10" stroke="var(--accent-cyan)" strokeOpacity="0.5" />
+                  <circle cx="12" cy="22" r="2" fill="var(--accent-cyan)" stroke="none" />
+                  <circle cx="28" cy="22" r="2" fill="var(--accent-cyan)" stroke="none" />
+                  <path d="M15 30h10" stroke="var(--accent-cyan)" strokeOpacity="0.6" strokeWidth="2" />
+                </g>
 
-                {/* Bot Response (Right) - Slop patterns */}
-                <path d="M120 105H85l-4 6 4-6V93h35z" stroke="var(--accent-cyan)" strokeWidth="1.2" strokeOpacity="0.6" />
-                <path d="M92 100h20M92 106h20M92 112h15" stroke="var(--accent-cyan)" strokeOpacity="0.4" strokeWidth="2" strokeLinecap="butt" />
-                
-                {/* Connecting Logic */}
-                <path d="M70 65v15M65 72l5 5 5-5" strokeOpacity="0.1" strokeDasharray="4 2" />
+                {/* The Slop Mountain (Piled Bubbles) */}
+                <g className="slop-piles" transform="translate(10, 60)">
+                  {/* Layer 1 (Bottom) */}
+                  <rect x="0" y="120" width="60" height="20" rx="4" strokeOpacity="0.1" />
+                  <rect x="70" y="125" width="80" height="25" rx="4" strokeOpacity="0.1" />
+                  <rect x="160" y="115" width="60" height="22" rx="4" strokeOpacity="0.1" />
+                  
+                  {/* Layer 2 */}
+                  <rect x="20" y="95" width="55" height="18" rx="4" stroke="var(--accent-purple)" strokeOpacity="0.4" />
+                  <rect x="85" y="90" width="70" height="22" rx="4" strokeOpacity="0.1" />
+                  <rect x="145" y="100" width="65" height="20" rx="4" strokeOpacity="0.1" />
+                  
+                  {/* Layer 3 */}
+                  <rect x="40" y="70" width="50" height="18" rx="4" strokeOpacity="0.1" />
+                  <rect x="100" y="65" width="60" height="20" rx="4" stroke="var(--accent-purple)" strokeOpacity="0.6" />
+                  <rect x="150" y="80" width="45" height="15" rx="4" strokeOpacity="0.1" />
+                  
+                  {/* Text Hints inside Bubbles */}
+                  <path d="M45 78h20M110 75h30" strokeOpacity="0.2" />
+                  <path d="M25 105h30M95 102h40" strokeOpacity="0.2" />
+                </g>
               </svg>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Heuristic Pattern Scan</div>
             </div>
@@ -646,25 +661,50 @@ export default function Home() {
             Protect your brand's unique human voice.
           </p>
           <div className="content-grid">
-            <div className="content-visual">
-              <svg width="140" height="140" viewBox="0 0 140 140" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                {/* Document Container */}
-                <rect x="20" y="30" width="100" height="80" rx="4" strokeOpacity="0.05" />
-                <path d="M70 30v80" strokeOpacity="0.1" strokeDasharray="4 4" />
+            <div className="content-visual" style={{ minHeight: '320px' }}>
+              <svg width="240" height="200" viewBox="0 0 240 200" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                {/* Main UI Frame */}
+                <rect x="10" y="10" width="220" height="180" rx="8" strokeOpacity="0.1" />
+                <path d="M160 10v180" strokeOpacity="0.1" strokeDasharray="4 4" />
                 
-                {/* Left: Input Text (Draft) */}
-                <path d="M30 45h30M30 55h30M30 65h20M30 75h30M30 85h25" strokeOpacity="0.1" />
-                
-                {/* Right: Results (Detection) */}
-                <path d="M80 45h30" strokeOpacity="0.1" />
-                <rect x="80" y="52" width="25" height="4" rx="1" fill="var(--accent-purple)" fillOpacity="0.4" stroke="none" />
-                <path d="M80 65h30" strokeOpacity="0.1" />
-                <rect x="80" y="72" width="20" height="4" rx="1" fill="var(--accent-cyan)" fillOpacity="0.4" stroke="none" />
-                <path d="M80 85h15" strokeOpacity="0.1" />
-                
-                {/* Recognition Badge */}
-                <circle cx="110" cy="110" r="10" stroke="var(--accent-purple)" strokeOpacity="0.6" />
-                <path d="M107 110l2 2 4-4" stroke="var(--accent-purple)" />
+                {/* Left Side: Analyzed Text Content */}
+                <g className="text-analysis" transform="translate(25, 30)">
+                  <path d="M0 10h120M0 22h80" strokeOpacity="0.2" />
+                  {/* Highlighted Slop Blocks */}
+                  <rect x="0" y="32" width="100" height="14" rx="3" stroke="var(--accent-purple)" strokeOpacity="0.6" strokeDasharray="2 2" />
+                  <path d="M5 39h90" strokeOpacity="0.1" />
+                  
+                  <path d="M0 56h120M0 68h110M0 80h40" strokeOpacity="0.2" />
+                  
+                  <rect x="0" y="90" width="70" height="14" rx="3" stroke="var(--accent-cyan)" strokeOpacity="0.4" />
+                  <path d="M5 97h60" strokeOpacity="0.1" />
+                  
+                  <path d="M0 114h120M0 126h90" strokeOpacity="0.2" />
+                </g>
+
+                {/* Right Side: Score Gauge & Metrics */}
+                <g className="sidebar" transform="translate(170, 30)">
+                  {/* Circular Gauge Sketch */}
+                  <circle cx="35" cy="30" r="22" strokeOpacity="0.1" />
+                  <path d="M35 52a22 22 0 1 1 0-44" stroke="var(--accent-purple)" strokeWidth="3" strokeLinecap="round" />
+                  <text x="35" y="36" textAnchor="middle" fill="var(--text-primary)" fontSize="16" fontWeight="bold" stroke="none">49</text>
+                  
+                  {/* Mini Progress Bars */}
+                  <g transform="translate(0, 70)">
+                    <rect x="0" y="0" width="50" height="4" rx="2" strokeOpacity="0.1" />
+                    <rect x="0" y="0" width="35" height="4" rx="2" fill="var(--accent-cyan)" fillOpacity="0.5" stroke="none" />
+                    
+                    <rect x="0" y="12" width="50" height="4" rx="2" strokeOpacity="0.1" />
+                    <rect x="0" y="12" width="25" height="4" rx="2" fill="var(--accent-purple)" fillOpacity="0.5" stroke="none" />
+                    
+                    <rect x="0" y="24" width="50" height="4" rx="2" strokeOpacity="0.1" />
+                  </g>
+                  
+                  {/* Bot Logo Sketch */}
+                  <rect x="25" y="120" width="20" height="15" rx="3" stroke="var(--accent-cyan)" strokeOpacity="0.4" />
+                  <circle cx="30" cy="125" r="1.2" fill="var(--accent-cyan)" stroke="none" />
+                  <circle cx="40" cy="125" r="1.2" fill="var(--accent-cyan)" stroke="none" />
+                </g>
               </svg>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Rhythmic Fluency</div>
             </div>
