@@ -617,25 +617,22 @@ export default function Home() {
               </p>
             </div>
             <div className="content-visual">
-              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                {/* Radar Grid */}
-                <circle cx="60" cy="60" r="50" strokeOpacity="0.05" />
-                <circle cx="60" cy="60" r="30" strokeOpacity="0.05" />
-                <path d="M60 10v100M10 60h100" strokeOpacity="0.05" />
-                <path d="M24.6 24.6l70.8 70.8M95.4 24.6L24.6 95.4" strokeOpacity="0.03" />
+              <svg width="140" height="140" viewBox="0 0 140 140" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                {/* Chatbot Frame */}
+                <rect x="40" y="20" width="60" height="45" rx="6" strokeOpacity="0.1" />
+                <path d="M60 42h20M60 35h10" strokeOpacity="0.1" />
+                <circle cx="55" cy="35" r="3" stroke="var(--accent-purple)" strokeWidth="1.5" />
                 
-                {/* Scanning Wave */}
-                <path d="M30 60c5-15 10-15 15 0s10 15 15 0 10-15 15 0 10 15 15 0" stroke="var(--accent-purple)" strokeWidth="1.5" strokeOpacity="0.8" />
-                <path d="M30 65c5-10 10-10 15 0s10 10 15 0 10-10 15 0 10 10 15 0" stroke="var(--accent-cyan)" strokeWidth="1" strokeOpacity="0.3" />
+                {/* User Message (Left) */}
+                <path d="M20 85h35l4 6-4-6v-12H20z" stroke="var(--accent-purple)" strokeWidth="1.2" strokeOpacity="0.8" />
+                <path d="M28 80h20M28 86h15" strokeOpacity="0.2" />
+
+                {/* Bot Response (Right) - Slop patterns */}
+                <path d="M120 105H85l-4 6 4-6V93h35z" stroke="var(--accent-cyan)" strokeWidth="1.2" strokeOpacity="0.6" />
+                <path d="M92 100h20M92 106h20M92 112h15" stroke="var(--accent-cyan)" strokeOpacity="0.4" strokeWidth="2" strokeLinecap="butt" />
                 
-                {/* Detection Nodes */}
-                <circle cx="45" cy="60" r="2" fill="var(--accent-purple)" stroke="none" fillOpacity="0.6" />
-                <circle cx="75" cy="60" r="2" fill="var(--accent-purple)" stroke="none" fillOpacity="0.6" />
-                <circle cx="60" cy="45" r="1.5" fill="var(--accent-cyan)" stroke="none" fillOpacity="0.4" />
-                
-                {/* UI Elements */}
-                <rect x="90" y="20" width="10" height="2" rx="1" fillOpacity="0.2" fill="currentColor" stroke="none" />
-                <rect x="90" y="25" width="6" height="2" rx="1" fillOpacity="0.1" fill="currentColor" stroke="none" />
+                {/* Connecting Logic */}
+                <path d="M70 65v15M65 72l5 5 5-5" strokeOpacity="0.1" strokeDasharray="4 2" />
               </svg>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Heuristic Pattern Scan</div>
             </div>
@@ -650,23 +647,24 @@ export default function Home() {
           </p>
           <div className="content-grid">
             <div className="content-visual">
-              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                {/* Decorative Background Arcs */}
-                <path d="M20 60c0-22 18-40 40-40s40 18 40 40" strokeOpacity="0.05" strokeDasharray="4 4" />
-                <path d="M30 60c0-16.5 13.5-30 30-30s30 13.5 30 30" strokeOpacity="0.08" />
+              <svg width="140" height="140" viewBox="0 0 140 140" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                {/* Document Container */}
+                <rect x="20" y="30" width="100" height="80" rx="4" strokeOpacity="0.05" />
+                <path d="M70 30v80" strokeOpacity="0.1" strokeDasharray="4 4" />
                 
-                {/* Multi-layered Organic Voice Waves */}
-                <path d="M20 60c10-25 20 25 30 0s20-35 30-10 20 25 20 10" stroke="var(--accent-cyan)" strokeOpacity="0.6" strokeWidth="1.8" />
-                <path d="M25 65c8-18 15 18 25 2s15-30 25-5 15 20 15 5" stroke="var(--accent-purple)" strokeOpacity="0.3" strokeWidth="1" />
+                {/* Left: Input Text (Draft) */}
+                <path d="M30 45h30M30 55h30M30 65h20M30 75h30M30 85h25" strokeOpacity="0.1" />
                 
-                {/* Signature/Unique Key Element */}
-                <path d="M45 85s5-2 10-10 15-25 25-35 15-5 18 0" strokeOpacity="0.8" strokeWidth="1.5" />
-                <circle cx="98" cy="40" r="3" stroke="var(--accent-purple)" strokeOpacity="0.6" strokeDasharray="1 2" />
+                {/* Right: Results (Detection) */}
+                <path d="M80 45h30" strokeOpacity="0.1" />
+                <rect x="80" y="52" width="25" height="4" rx="1" fill="var(--accent-purple)" fillOpacity="0.4" stroke="none" />
+                <path d="M80 65h30" strokeOpacity="0.1" />
+                <rect x="80" y="72" width="20" height="4" rx="1" fill="var(--accent-cyan)" fillOpacity="0.4" stroke="none" />
+                <path d="M80 85h15" strokeOpacity="0.1" />
                 
-                {/* Human Factor Particles */}
-                <circle cx="35" cy="50" r="1.5" fill="var(--accent-cyan)" fillOpacity="0.4" stroke="none" />
-                <circle cx="85" cy="70" r="1.5" fill="var(--accent-purple)" fillOpacity="0.4" stroke="none" />
-                <path d="M55 20l2 2m-2 0l-2 2" strokeOpacity="0.2" />
+                {/* Recognition Badge */}
+                <circle cx="110" cy="110" r="10" stroke="var(--accent-purple)" strokeOpacity="0.6" />
+                <path d="M107 110l2 2 4-4" stroke="var(--accent-purple)" />
               </svg>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '20px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '500' }}>Rhythmic Fluency</div>
             </div>
